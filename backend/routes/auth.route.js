@@ -14,4 +14,4 @@ router.post('/logout', logout);
 router.post('/refresh-token', refreshAccessToken);
 // router.get('/profile', getProfile);
 
-export const authRouter = router;
+export default router;
