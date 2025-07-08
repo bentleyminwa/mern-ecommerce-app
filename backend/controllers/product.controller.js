@@ -124,3 +124,71 @@ export const deleteProduct = async (req, res) => {
         });
     }
 };
+
+export const getProductsByCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+
+        const products = await Product.find({ category });
+
+        if (!products) {
+            return res.status(404).json({
+                status: 'error',
+                message: `No products found in the category: ${category}`,
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            results: products.length,
+            data: {
+                products: products,
+            },
+        });
+    } catch (error) {
+        console.log(
+            'Error occuring in the getProductsByCategory controller:',
+            error
+        );
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching products by category',
+        });
+    }
+};
+
+export const getRecommendedProducts = async (req, res) => {
+    try {
+        const products = await Product.aggregate([
+            {
+                $sample: { size: 3 },
+            },
+            {
+                $project: {
+                    name: 1,
+                    description: 1,
+                    price: 1,
+                    category: 1,
+                    image: 1,
+                },
+            },
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            results: products.length,
+            data: {
+                products: products,
+            },
+        });
+    } catch (error) {
+        console.log(
+            'Error occuring in the getRecommendedProducts controller:',
+            error
+        );
+        res.status(500).json({
+            status: 'error',
+            message: 'Error fetching recommended products',
+        });
+    }
+};
