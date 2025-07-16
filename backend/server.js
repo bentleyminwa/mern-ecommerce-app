@@ -4,6 +4,7 @@ import express from 'express';
 
 import { connectDB } from './lib/db.js';
 import authRouter from './routes/auth.route.js';
+import cartRouter from './routes/cart.route.js';
 import productRouter from './routes/product.route.js';
 
 dotenv.config();
@@ -16,9 +17,10 @@ app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 
-    connectDB();
+  connectDB();
 });
